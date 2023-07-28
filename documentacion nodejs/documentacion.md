@@ -264,3 +264,97 @@ Esto ejecutará tu aplicación con Nodemon, lo que permitirá que se reinicie au
 Recuerda que, para que Nodemon funcione correctamente, debes asegurarte de tener un archivo principal de la aplicación, como "app.js", que contenga el código del servidor que deseas ejecutar.
 
 Con estos pasos, deberías tener Nodemon instalado en tu proyecto y tu servidor HTTP listo para funcionar. Si necesitas más información o tienes alguna pregunta adicional, no dudes en consultarme.
+
+# Introducción a Express.js - Un framework de aplicaciones web para Node.js
+
+## ¿Qué es Express.js?
+Express.js es un popular framework de aplicaciones web para Node.js. Proporciona una capa adicional de abstracción sobre el módulo http incorporado de Node.js, lo que facilita la creación de aplicaciones web y APIs de manera más eficiente y con menos código.
+
+## Características principales de Express.js
+- **Enrutamiento:** Express proporciona un enrutador flexible que permite definir rutas y manejar las solicitudes HTTP correspondientes. Esto permite establecer la lógica de controladores para diferentes rutas y métodos HTTP.
+
+- **Middleware:** Express utiliza un modelo de middleware, donde se pueden agregar funciones intermediarias (middleware) a la cadena de procesamiento de solicitudes. Esto permite realizar acciones como autenticación, compresión, registro y manipulación de solicitudes y respuestas antes de que lleguen a su controlador final.
+
+- **Gestión de vistas:** Express facilita el renderizado de vistas HTML utilizando cualquier motor de plantillas (como EJS, Pug o Handlebars) para generar contenido dinámico y enviarlo al cliente.
+
+- **Integración con servicios y recursos externos:** Express proporciona una forma sencilla de interactuar con servicios y recursos externos, como bases de datos, servicios de almacenamiento en la nube y APIs de terceros, a través de bibliotecas y módulos adicionales.
+
+## Instalación de Express.js en Windows y Linux
+Para instalar Express.js en tu proyecto, sigue estos pasos:
+
+1. Abre una ventana de terminal o línea de comandos.
+2. Ejecuta el siguiente comando para instalar Express: `npm i -E express`
+3. Una vez que la instalación se haya completado, podrás utilizar Express en tu proyecto. Puedes importarlo en tus archivos de JavaScript para comenzar a construir tu aplicación web con Express.
+
+```javascript
+// Ejemplo de inicio de servidor con Express y definición de una ruta "/campus"
+
+const express = require('express');
+const expressApp = express();
+
+expressApp.get('/campus', (req, res) => {
+  res.send("Hello developer");
+});
+
+const serverConfig = {
+  host: 'localhost',
+  port: 3000
+};
+
+expressApp.listen(serverConfig.port, serverConfig.host, () => {
+  console.log(`Server is running at http://${serverConfig.host}:${serverConfig.port}`);
+});
+```
+
+## Obtener parámetros y encabezados en Express.js
+En Express, puedes obtener parámetros y encabezados enviados en una solicitud HTTP usando req.params y req.headers respectivamente.
+
+```javascript
+// Ejemplo para obtener parámetros y encabezados de una solicitud HTTP en Express
+
+expressApp.get('/campus/:idCamper', (req, res) => {
+  const obj = {
+    "Datos de la URL": req.params,   // Obtiene los parámetros enviados en la URL
+    "Encabezados": req.headers      // Obtiene los encabezados de la solicitud
+  };
+  
+  console.log(obj);   // Muestra los datos en la consola del servidor
+  
+  res.send(obj);      // Envía los datos de vuelta al cliente
+});
+```
+
+## Middleware en Express.js
+Los middlewares en Express son funciones que se utilizan para procesar las solicitudes HTTP o las respuestas antes de que lleguen a su destino final. Pueden realizar tareas como modificar objetos de solicitud o respuesta, realizar validaciones, autenticar usuarios, etc.
+
+```javascript
+// Ejemplo de uso de middleware en Express.js
+
+// Middleware que se ejecuta antes de manejar cualquier ruta
+expressApp.use((req, res, next) => {
+  console.log(req);    // Imprime la solicitud en la consola del servidor
+  next();              // Llama a next() para continuar con el siguiente middleware o ruta
+});
+
+// Ruta que captura parámetro de nombre en una solicitud POST
+expressApp.post('/ruta', (req, res) => {
+  const nombre = req.params.nombre;
+  // Lógica para procesar la solicitud POST
+  res.send(`Hola, ${nombre}!`);
+});
+```
+## Router en Express.js
+Un router en Express es una forma de organizar y gestionar las rutas de una aplicación web de manera modular. Permite agrupar rutas relacionadas y sus controladores en un lugar específico, mejorando la estructura y la legibilidad del código.
+
+```javascript
+// Ejemplo de uso de router en Express.js
+
+// Importación del enrutador desde un archivo campus.js
+const appCamper = require('./campus');
+
+// Redirección de solicitudes al enrutador appCamper
+expressApp.use('/campus', appCamper);
+```
+En el ejemplo anterior, appCamper es un enrutador que contiene las definiciones de las rutas relacionadas con el campus. Todas las solicitudes que comiencen con /campus serán redirigidas al enrutador appCamper, lo que permite organizar las rutas relacionadas en un lugar específico.
+
+Estos son solo algunos aspectos básicos de Express.js. Con esta información, podrás empezar a construir aplicaciones web y APIs utilizando el poder y la flexibilidad de Express.js en Node.js.
