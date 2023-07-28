@@ -404,3 +404,103 @@ app.get('/campus', (req, res) => {
   res.send("Campers :)");
 });
 ```
+
+# Introducción a Express.js - Un framework de aplicaciones web para Node.js
+
+## 2.3. Conexión a MySQL usando 'mysql2'
+`mysql2` es un paquete de Node.js que proporciona una interfaz para interactuar con bases de datos MySQL. Es una biblioteca de cliente MySQL para Node.js que se basa en el paquete mysql original pero con varias mejoras y optimizaciones. `mysql2` ofrece un rendimiento superior en comparación con `mysql`, especialmente en escenarios con altas cargas de trabajo y consultas concurrentes. Utiliza la biblioteca C++ libmysqlclient para comunicarse directamente con el servidor MySQL, lo que permite una mayor eficiencia y velocidad.
+
+Más información: [mysql2 en GitHub](https://github.com/sidorares/node-mysql2)
+
+### 2.3.1. Características
+- **Rendimiento mejorado:** `mysql2` ha sido diseñado para proporcionar un rendimiento superior y un menor uso de recursos en comparación con `mysql`. Esto se logra mediante el uso de conexiones de socket TCP/IP más eficientes y un mejor manejo de la memoria.
+- **Soporte para consultas preparadas:** `mysql2` permite utilizar consultas preparadas, lo que puede mejorar la seguridad y el rendimiento al ejecutar consultas repetidas con diferentes parámetros.
+- **Manejo de resultados de consultas mejorado:** `mysql2` proporciona un manejo mejorado de los resultados de las consultas, lo que permite un procesamiento más eficiente de grandes conjuntos de resultados.
+- **Compatibilidad con las últimas características de MySQL:** `mysql2` se mantiene actualizado con las últimas características y mejoras introducidas en MySQL.
+- **Streams:** `mysql2` admite el uso de streams para la recuperación de resultados de consultas grandes. Esto significa que puedes leer y procesar los resultados en tiempo real a medida que se recuperan del servidor de MySQL, en lugar de esperar a que se complete toda la consulta.
+- **Compatibilidad con promesas:** A diferencia de `mysql`, `mysql2` proporciona una API basada en promesas, lo que facilita el manejo de consultas asíncronas y mejora la legibilidad del código.
+- **Pooling de conexiones mejorado:** `mysql2` ofrece un sistema de pooling de conexiones más avanzado que `mysql`. El pooling de conexiones es útil para administrar un grupo de conexiones a la base de datos y reutilizarlas de manera eficiente para consultas sucesivas.
+- **Soporte para autenticación segura:** `mysql2` admite la autenticación segura con el servidor de MySQL utilizando los métodos de autenticación más recientes, como la autenticación de enchufe de autenticación (caching_sha2_password).
+- **Compatibilidad con múltiples consultas:** `mysql2` permite ejecutar varias consultas en una sola llamada, lo que puede mejorar la eficiencia al reducir la latencia de la red.
+- **Enlace nativo opcional:** `mysql2` ofrece la opción de utilizar un enlace nativo opcional para mejorar aún más el rendimiento. Este enlace nativo utiliza la biblioteca C mysqlclient en lugar de libmysqlclient, lo que puede brindar una mejora de rendimiento adicional.
+
+### 2.3.2. Instalación de mysql2 para 'Windows y Linux'
+1. Abre una terminal o línea de comandos y navega hasta la ubicación de tu proyecto.
+2. Ejecuta el siguiente comando para instalar `mysql2`: `npm i -E -D mysql2`
+3. Una vez finalizada la instalación, puedes comenzar a utilizar `mysql2` en tu aplicación. Asegúrate de requerirlo en tu archivo de JavaScript donde necesites interactuar con la base de datos MySQL. Puedes hacerlo utilizando el siguiente código:
+
+```javascript
+const mysql = require('mysql2');
+```
+
+#### Ejemplos prácticos con Express.js y mysql2
+
+A continuación, te presento ejemplos de cómo realizar operaciones SELECT, INSERT, UPDATE y DELETE utilizando `mysql2` con Express.js.
+
+**SELECT**
+
+```javascript
+const express = require('express');
+const mysql = require('mysql2');
+
+const app = express();
+
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'tu_usuario',
+  password: 'tu_contraseña',
+  database: 'tu_base_de_datos'
+});
+
+app.get('/usuarios', (req, res) => {
+  connection.query('SELECT * FROM usuarios', (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Servidor Express escuchando en el puerto 3000');
+});
+```
+**INSERT INTO**
+
+```javascript
+// Supongamos que recibimos datos del usuario a través del cuerpo de la solicitud
+app.post('/agregar-usuario', (req, res) => {
+  const { nombre, edad, email } = req.body;
+
+  connection.query('INSERT INTO usuarios (nombre, edad, email) VALUES (?, ?, ?)', [nombre, edad, email], (err, results) => {
+    if (err) throw err;
+    res.send('Usuario agregado correctamente');
+  });
+});
+```
+
+**UPDATE**
+
+```javascript
+// Supongamos que recibimos datos del usuario a través del cuerpo de la solicitud
+app.put('/actualizar-usuario/:id', (req, res) => {
+  const { nombre, edad, email } = req.body;
+  const usuarioId = req.params.id;
+
+  connection.query('UPDATE usuarios SET nombre = ?, edad = ?, email = ? WHERE id = ?', [nombre, edad, email, usuarioId], (err, results) => {
+    if (err) throw err;
+    res.send('Usuario actualizado correctamente');
+  });
+});
+```
+
+**DELETE**
+
+```javascript
+app.delete('/eliminar-usuario/:id', (req, res) => {
+  const usuarioId = req.params.id;
+
+  connection.query('DELETE FROM usuarios WHERE id = ?', [usuarioId], (err, results) => {
+    if (err) throw err;
+    res.send('Usuario eliminado correctamente');
+  });
+});
+```
