@@ -358,3 +358,49 @@ expressApp.use('/campus', appCamper);
 En el ejemplo anterior, appCamper es un enrutador que contiene las definiciones de las rutas relacionadas con el campus. Todas las solicitudes que comiencen con /campus serán redirigidas al enrutador appCamper, lo que permite organizar las rutas relacionadas en un lugar específico.
 
 Estos son solo algunos aspectos básicos de Express.js. Con esta información, podrás empezar a construir aplicaciones web y APIs utilizando el poder y la flexibilidad de Express.js en Node.js.
+
+## Que son las variables de entorno ‘dotenv’
+
+Las variables de entorno en Node.js son variables específicas del entorno en el que se ejecuta una aplicación. Son valores que se pueden configurar externamente al código y se utilizan para almacenar información sensible, configuraciones personalizadas u otros datos relevantes para la aplicación. En Node.js, las variables de entorno se pueden acceder utilizando el objeto `process.env`. Este objeto proporciona acceso a todas las variables de entorno definidas en el sistema operativo donde se está ejecutando la aplicación.
+
+Más información: [dotenv en GitHub](https://github.com/motdotla/dotenv)
+
+### 2.2.1. Características
+- Configuración de la aplicación: Puedes utilizar variables de entorno para almacenar valores de configuración, como credenciales de bases de datos, claves de API, URL de servicios externos, etc. Esto permite mantener esta información sensible separada del código fuente y facilita la configuración de la aplicación en diferentes entornos (desarrollo, producción, pruebas, etc.).
+- Parámetros personalizables: Puedes utilizar variables de entorno para permitir la personalización de ciertos comportamientos de la aplicación. Por ejemplo, podrías tener una variable de entorno que determine el número de elementos a mostrar por página en una paginación, o el idioma predeterminado a utilizar.
+- Depuración y registro: Las variables de entorno también pueden ser útiles para habilitar o deshabilitar la depuración o el registro de la aplicación en función de la configuración del entorno. Esto permite tener un mayor control sobre los mensajes de registro o habilitar características adicionales de depuración en entornos de desarrollo o pruebas.
+
+### 2.2.2. Instalación de dotenv para 'Windows y Linux'
+Para instalar y utilizar el paquete dotenv en tu proyecto de Node.js, sigue estos pasos:
+
+1. Asegúrate de estar ubicado en la raíz de tu proyecto de Node.js en la línea de comandos.
+2. Ejecuta el siguiente comando para instalar dotenv: `npm i -E -D dotenv`
+3. Crea un archivo llamado `.env` en la raíz de tu proyecto y agrega las variables de entorno que deseas configurar. Por ejemplo:
+
+```bash
+MY_CONFIG={"apiKey": "mi_clave_secreta", "apiURL": "https://api.ejemplo.com"}
+```
+1. En el archivo donde desees utilizar las variables de entorno (por ejemplo, app.js), agrega las siguientes líneas al principio del archivo:
+
+```js
+require('dotenv').config();
+```
+Esto cargará automáticamente las variables de entorno definidas en el archivo `.env` en el objeto `process.env`. Ten en cuenta que las variables de entorno definidas en el archivo `.env` ahora están disponibles en tu aplicación.
+
+Recuerda que el archivo `.env` debe mantenerse fuera del control de versiones, ya que generalmente contiene información sensible como claves de API o contraseñas. Sin embargo, puedes proporcionar un archivo `.env.example` que incluya las variables de entorno esperadas con valores de ejemplo para que otros desarrolladores puedan configurar su propio archivo `.env`.
+
+### 2.2.3. Configuración de dotenv con Express
+
+Esta línea de código carga las variables de entorno definidas en el archivo `.env` en `process.env`, lo que permite acceder a ellas posteriormente.
+
+```js
+require('dotenv').config();
+```
+Se obtiene la configuración del servidor desde la variable de entorno MY_CONFIG, que se supone contiene una cadena JSON. La cadena se analiza y se convierte en un objeto JavaScript utilizando JSON.parse(), y se guarda en la variable config.
+
+Se define una ruta GET para la ruta /campus. Cuando se accede a esta ruta, se envía la respuesta "Campers :)".
+```js
+app.get('/campus', (req, res) => {
+  res.send("Campers :)");
+});
+```
