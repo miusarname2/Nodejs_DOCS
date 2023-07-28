@@ -504,3 +504,30 @@ app.delete('/eliminar-usuario/:id', (req, res) => {
   });
 });
 ```
+
+## 3.1. ¿Qué es nanoid?
+`nanoid` es una biblioteca de generación de identificadores únicos y aleatorios en Node.js. Proporciona una forma sencilla de generar identificadores únicos que pueden ser utilizados, por ejemplo, como claves primarias en bases de datos, identificadores de objetos, tokens de autenticación, entre otros casos de uso. La biblioteca `nanoid` está diseñada para ser rápida, compacta y segura, generando identificadores únicos de forma eficiente. Utiliza una combinación de caracteres alfanuméricos y se puede configurar para generar identificadores con diferentes longitudes y utilizando diferentes alfabetos.
+
+Más información: [nanoid en GitHub](https://github.com/ai/nanoid)
+
+### 3.1.1. Características
+- **Generación de identificadores únicos:** `nanoid` está diseñado específicamente para generar identificadores únicos de manera eficiente. Utiliza algoritmos criptográficamente seguros para garantizar que los identificadores generados sean altamente improbables de repetirse.
+- **Tamaño configurable:** Puedes especificar la longitud deseada del identificador generado mediante el parámetro de longitud de la función `nanoid()`. Esto te permite ajustar el tamaño del identificador según tus necesidades específicas.
+- **Alfabeto personalizable:** `nanoid` utiliza un conjunto de caracteres alfanuméricos por defecto (a-z, A-Z y 0-9). Sin embargo, también puedes personalizar el alfabeto utilizado para generar los identificadores. Esto te permite, por ejemplo, utilizar solo caracteres en minúscula o añadir caracteres adicionales según tus preferencias.
+- **Rendimiento eficiente:** `nanoid` está diseñado para ser rápido y eficiente en términos de rendimiento. Los algoritmos utilizados se optimizan para generar identificadores únicos de manera rápida, lo que es especialmente importante cuando se necesitan generar grandes cantidades de identificadores en poco tiempo.
+- **Tamaño compacto:** La biblioteca `nanoid` es relativamente pequeña y liviana, lo que significa que no añade una carga significativa a tus aplicaciones Node.js. Esto es especialmente beneficioso si estás trabajando en entornos con restricciones de recursos.
+
+### 3.1.2. Instalación de nanoid para 'Windows y Linux'
+1. Abre una terminal o línea de comandos en el directorio raíz de tu proyecto.
+2. Ejecuta el siguiente comando para instalar `nanoid` a través de npm (Node Package Manager): `npm i -E -D nanoid`
+Esto descargará la biblioteca `nanoid` y todas sus dependencias en un directorio llamado `node_modules`.
+3. Una vez que la instalación esté completa, puedes utilizar `nanoid` en tu proyecto de Node.js importándolo en tus archivos JavaScript. Por ejemplo, si quieres generar un `nanoid` en tu código, puedes hacer lo siguiente:
+
+```javascript
+const { nanoid } = require('nanoid');
+const uniqueId = nanoid(); // Genera un identificador único
+console.log(uniqueId); // Imprime el identificador único generado.
+```
+Recuerda que `nanoid` genera identificadores únicos que son aleatorios y no se repiten fácilmente. Por lo tanto, cada vez que ejecutes el código anterior, obtendrás un nuevo identificador único.
+
+¡Así de sencillo es utilizar `nanoid` para generar identificadores únicos en tu aplicación Node.js! Puedes utilizar estos identificadores en diversas partes de tu aplicación, como en la creación de usuarios, asignación de tokens de autenticación o cualquier otro caso donde necesites un identificador único y aleatorio.
