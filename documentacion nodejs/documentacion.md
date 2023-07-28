@@ -531,3 +531,68 @@ console.log(uniqueId); // Imprime el identificador único generado.
 Recuerda que `nanoid` genera identificadores únicos que son aleatorios y no se repiten fácilmente. Por lo tanto, cada vez que ejecutes el código anterior, obtendrás un nuevo identificador único.
 
 ¡Así de sencillo es utilizar `nanoid` para generar identificadores únicos en tu aplicación Node.js! Puedes utilizar estos identificadores en diversas partes de tu aplicación, como en la creación de usuarios, asignación de tokens de autenticación o cualquier otro caso donde necesites un identificador único y aleatorio.
+
+# Node JS Avanzado - Manejo de Cookies con `cookie-parser`
+
+## 3.2. ¿Qué son las cookies?
+Las cookies son pequeños fragmentos de información que se almacenan en el lado del cliente (generalmente en el navegador) y se utilizan para realizar un seguimiento de la información relacionada con la sesión del usuario o para almacenar preferencias específicas. Cuando un cliente realiza una solicitud a un servidor Node.js, puede enviar una cookie junto con la solicitud. El servidor puede leer esa cookie y utilizar la información almacenada en ella para realizar acciones específicas o personalizar la respuesta.
+
+### 3.2.1. ¿Qué es `cookie-parser`?
+`cookie-parser` es un middleware popular en Node.js que se utiliza para analizar y manejar cookies en las solicitudes HTTP. Proporciona una forma conveniente de leer y manipular las cookies enviadas por el cliente.
+
+Más información: [cookie-parser en GitHub](https://github.com/expressjs/cookieparser)
+
+### 3.2.2. Características
+- **Análisis de cookies:** `cookie-parser` analiza automáticamente las cookies presentes en las solicitudes entrantes y las convierte en un objeto JavaScript accesible en las rutas de tu aplicación.
+- **Acceso sencillo:** Una vez que `cookie-parser` ha analizado las cookies, proporciona acceso sencillo a ellas a través de la propiedad `req.cookies` del objeto request (`req`) en Express. Puedes leer los valores de las cookies y utilizarlos en tus manejadores de rutas.
+- **Soporte para firmado de cookies:** `cookie-parser` también admite la firma de cookies utilizando una clave secreta. Puedes especificar una clave al configurar `cookie-parser` para que las cookies se firmen automáticamente y se verifiquen cuando sean recibidas.
+- **Configuración de opciones:** Puedes personalizar el comportamiento de `cookie-parser` configurando diversas opciones. Algunas opciones comunes incluyen la configuración de las opciones de firma, la duración de las cookies, la ruta de acceso, el dominio, etc.
+- **Establecimiento de cookies:** Además de analizar las cookies entrantes, `cookie-parser` te permite establecer fácilmente nuevas cookies en las respuestas salientes utilizando el método `res.cookie()` en Express. Esto simplifica el proceso de establecer y enviar cookies al cliente.
+- **Middleware de alto rendimiento:** `cookie-parser` está diseñado para ser un middleware de alto rendimiento que procesa eficientemente las cookies en las solicitudes entrantes. Puede manejar múltiples cookies y realizar las tareas de análisis y manipulación de cookies de manera eficaz.
+
+### 3.2.3. Instalación de `cookie-parser` para 'Windows y Linux'
+1. Inicia un nuevo proyecto Node.js o ve al directorio de tu proyecto existente desde la línea de comandos.
+2. Ejecuta el siguiente comando para instalar `cookie-parser` utilizando el gestor de paquetes npm: `npm i -E -D cookie-parser`
+Esto descargará e instalará el paquete `cookie-parser` y todas sus dependencias en tu proyecto.
+3. Una vez que se haya completado la instalación, puedes usar `cookie-parser` en tu aplicación Node.js incluyendo el siguiente código en tu archivo JavaScript:
+
+```javascript
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const { nanoid } = require('nanoid');
+
+// Inicialización de Express
+const appExpress = express();
+
+// Uso de middleware cookie-parser
+appExpress.use(cookieParser());
+
+// Definición de rutas
+appExpress.get('/', (req, res) => {
+  // Configura una cookie llamada 'sessionId' con un valor único generado por nanoid
+  res.cookie('sessionId', nanoid(), { httpOnly: true });
+  res.send('Welcome');
+});
+
+appExpress.post('/', (req, res) => {
+  // Comprueba si existe una cookie llamada 'sessionId'
+  if (!req.cookies.sessionId) {
+    // Devuelve un estado HTTP 401 (no autorizado) con un mensaje de error
+    return res.status(401).send('Unauthorized');
+  }
+
+  // Borra la cookie 'sessionId'
+  res.clearCookie('sessionId');
+  // Envía un estado HTTP 200, lo que indica que la solicitud ha tenido éxito
+  res.sendStatus(200);
+});
+
+// Configuración del servidor
+const PORT = 3000;
+const HOST = '127.0.0.1';
+
+// Escucha del servidor
+appExpress.listen(PORT, HOST, () => {
+  console.log(`Servidor en ejecución en http://${HOST}:${PORT}`);
+});
+```
