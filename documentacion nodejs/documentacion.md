@@ -596,3 +596,100 @@ appExpress.listen(PORT, HOST, () => {
   console.log(`Servidor en ejecución en http://${HOST}:${PORT}`);
 });
 ```
+# Node JS Avanzado - Data Transfer Object (DTO) y class-transformer
+
+## 3.3. ¿Qué es DTO (Data Transfer Object)?
+DTO significa Data Transfer Object (Objeto de Transferencia de Datos). Es un patrón de diseño que se utiliza en la programación de software, especialmente en arquitecturas de varias capas, donde se necesita transferir datos entre capas o componentes del software.
+
+Un DTO es esencialmente un objeto simple, a menudo sin lógica de negocio, que contiene solo campos y métodos de acceso (getters y setters). Su objetivo principal es encapsular los datos y permitir su transporte de un sistema a otro de manera eficiente. Se utilizan para serializar los datos que deben enviarse a través de la red, lo que puede ser costoso en términos de recursos de tiempo y CPU.
+
+Más información: [class-transformer en GitHub](https://github.com/typestack/class-transformer)
+
+### 3.3.2. Características
+- **Simplicidad:** Un DTO es un objeto simple que contiene atributos y métodos para acceder y modificar estos atributos (getters y setters). No contiene lógica empresarial ni comportamientos complejos.
+- **Eficiencia:** Los DTOs son utilizados para agrupar y transferir múltiples datos en una sola llamada de red o entre componentes de un sistema, lo que puede reducir la sobrecarga de la red y aumentar la eficiencia.
+- **Encapsulación:** Encapsulan los datos que necesitan ser transferidos entre procesos o entre la red, asegurándose de que los datos internos del objeto no sean expuestos directamente.
+- **Serialización:** Los DTOs se pueden serializar en varios formatos como XML, JSON, etc., lo que permite una fácil transferencia de datos a través de la red.
+- **Estructurados según las necesidades del cliente:** A diferencia de los objetos de dominio que están estructurados según las necesidades de la lógica empresarial, los DTOs se estructuran según las necesidades del cliente que recibe los datos. Esto significa que puedes tener varios DTOs para el mismo objeto de dominio, cada uno optimizado para diferentes vistas o diferentes consumidores de los datos.
+- **Reducen el acoplamiento:** Debido a que los DTOs se utilizan para transferir datos entre capas o componentes, ayudan a reducir el acoplamiento entre estos componentes. Esto significa que los cambios en un componente no necesitan propagarse a otros componentes siempre y cuando el DTO se mantenga constante.
+
+### 3.3.3. ¿Qué es class-transformer?
+class-transformer es una biblioteca en Node.js que permite transformar objetos de tipo "plano" o JSON en instancias de clases y viceversa. Esta librería es muy útil en conjunción con el patrón Data Transfer Object (DTO), donde los DTOs a menudo se crean como clases.
+
+La biblioteca ofrece un conjunto de funciones útiles, como:
+- `classToPlain`: Convierte la instancia de una clase a un objeto plano.
+- `plainToClass`: Convierte un objeto plano a una instancia de una clase específica.
+- `classToClass`: Crea una nueva copia de la instancia de una clase.
+- `classToClassFromExist`: Crea una nueva copia de la instancia de una clase, manteniendo los valores existentes en la instancia objetivo.
+
+Además, la biblioteca class-transformer permite controlar más a fondo el proceso de transformación utilizando decoradores, lo que te permite especificar cómo se deben manejar ciertos campos durante la transformación. Por ejemplo, puedes excluir ciertos campos de la transformación, cambiar el nombre de un campo, transformar el valor de un campo, y mucho más.
+
+Esta biblioteca es especialmente útil cuando se trabaja con marcos como Express.js y se utiliza junto con la biblioteca class-validator para la validación del lado del servidor en aplicaciones Node.js.
+
+### 3.3.4. Instalación de class-transformer para 'Windows y Linux'
+Para instalar class-transformer en un sistema Linux con Node.js, necesitarás usar npm (el administrador de paquetes de Node.js). Abre una terminal y escribe los siguientes comandos:
+
+1. Instalar class-transformer:
+```bash
+npm i -E -D class-transformer
+```
+2. Instalar reflect-metadata (polyfill para la propuesta de metadatos de reflexión):
+
+```bash
+npm i -E -D reflect-metadata
+```
+
+3. Instalar class-validator (biblioteca para la validación de campos):
+
+```bash
+npm i -E -D class-validator
+```
+
+4. Instalar TypeScript (si aún no lo tienes instalado):
+
+```bash
+npm i -E -D typescript
+```
+
+Una vez que tienes TypeScript instalado, puedes iniciar un archivo tsconfig.json usando el siguiente comando en la raíz de tu proyecto:
+
+```bash
+npx tsc --init
+```
+
+Esto creará un archivo tsconfig.json en tu directorio de proyecto con una configuración predeterminada. Puedes modificar este archivo según las necesidades de tu proyecto.
+
+A continuación, se muestra un ejemplo del archivo user.ts que utiliza class-transformer y class-validator para definir un DTO llamado User.
+
+```typescript
+import { Expose } from 'class-transformer';
+import { IsDefined, IsNumber, IsEmail, IsString } from 'class-validator';
+
+export class User {
+  @Expose({ name: 'id' })
+  @IsNumber({}, { message: 'El id no cumple con el formato' })
+  @IsDefined({ message: 'El parámetro id es obligatorio' })
+  ID: number;
+
+  @Expose({ name: 'nom_com' })
+  @IsString()
+  @IsDefined({ message: 'El parámetro nom_com es obligatorio' })
+  @MaxLength(100, { message: 'El parámetro nom_com debe tener como máximo 100 caracteres' })
+  @MinLength(2, { message: 'El parámetro nom_com debe tener al menos 2 caracteres' })
+  nom_com: string;
+
+  @Expose({ name: 'ema' })
+  @IsEmail({}, { message: 'El parámetro ema debe tener un formato de correo electrónico válido' })
+  @IsDefined({ message: 'El parámetro ema es obligatorio' })
+  ema: string;
+
+  @Expose({ name: 'psw' })
+  @IsString()
+  @IsDefined({ message: 'El parámetro psw es obligatorio' })
+  @MaxLength(12, { message: 'El parámetro psw debe tener como máximo 12 caracteres' })
+  @MinLength(8, { message: 'El parámetro psw debe tener al menos 8 caracteres' })
+  psw: string;
+
+  constructor(ID: number, nom_com: string, ema: string, psw:
+
+```
