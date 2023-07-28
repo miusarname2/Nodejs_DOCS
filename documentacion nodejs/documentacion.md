@@ -203,4 +203,64 @@ rl.question('Ingresa la cantidad en dólares: ', (cantidadDolares) => {
 
   console.log(`${cantidadDolares}
 ```
+# 1.8. ¿Qué es Nodemon?
 
+Nodemon es una herramienta de desarrollo para aplicaciones Node.js que facilita la tarea de reiniciar automáticamente la aplicación cuando se detectan cambios en los archivos del proyecto. En lugar de tener que reiniciar manualmente la aplicación cada vez que se realizan cambios en el código, Nodemon lo hace de forma automática, lo que agiliza el proceso de desarrollo y mejora la productividad.
+
+Cuando se ejecuta una aplicación con Nodemon, este monitorea los archivos del proyecto en busca de cambios. Si se detecta algún cambio en un archivo, Nodemon reinicia automáticamente la aplicación, lo que significa que los cambios realizados en el código se reflejan de inmediato sin tener que detener y reiniciar manualmente la ejecución de la aplicación.
+
+Nodemon también proporciona opciones adicionales, como la capacidad de especificar qué archivos se deben monitorear y reiniciar, ignorar ciertos archivos o directorios, y ejecutar scripts personalizados antes o después de cada reinicio de la aplicación.
+
+## 1.8.1. Características
+
+- Reinicio automático: Nodemon monitorea los archivos del proyecto en busca de cambios y reinicia automáticamente la aplicación cuando se detecta un cambio. Esto evita tener que reiniciar manualmente la aplicación cada vez que se realicen modificaciones en el código.
+- Soporte amplio: Nodemon es compatible con una amplia variedad de proyectos y frameworks basados en Node.js. Puede utilizarse en proyectos simples, así como en aplicaciones más complejas y basadas en frameworks como Express, Koa, Hapi, entre otros.
+- Detalles de reinicio controlados: Nodemon permite controlar los detalles del reinicio automático de la aplicación. Puedes especificar qué archivos o directorios deben ser monitoreados y reiniciados, y también puedes excluir archivos o directorios específicos del monitoreo.
+- Integración con scripts personalizados: Nodemon proporciona la capacidad de ejecutar scripts personalizados antes o después de cada reinicio de la aplicación. Esto permite realizar tareas adicionales, como limpiar la caché, ejecutar pruebas automatizadas o ejecutar comandos de compilación, para que se realicen automáticamente en cada reinicio.
+- Modo silencioso: Nodemon tiene un modo silencioso que reduce la cantidad de información de registro que se muestra en la consola. Esto puede ser útil para mantener un flujo de trabajo limpio y sin distracciones durante el desarrollo.
+- Configuración flexible: Nodemon proporciona opciones de configuración flexibles que permiten ajustar su comportamiento según las necesidades del proyecto. Puedes especificar opciones como la extensión de archivos a monitorear, el tiempo de espera antes de reiniciar, la exclusión de archivos o directorios, y más.
+- Amplia comunidad y soporte activo: Nodemon tiene una comunidad activa de desarrolladores y una amplia base de usuarios. Esto significa que hay una gran cantidad de recursos y soporte disponibles en línea, lo que facilita obtener ayuda y encontrar soluciones a problemas comunes.
+
+## 1.8.2. Instalación para 'Windows y Linux'
+
+Para instalar Nodemon en tu proyecto, sigue los siguientes pasos:
+
+1. Abre una terminal o línea de comandos en la carpeta raíz de tu proyecto.
+
+2. Si aún no tienes un archivo `package.json`, puedes crear uno ejecutando el siguiente comando:
+
+```bash
+npm init -y
+```
+
+Esto creará un archivo `package.json` con los valores predeterminados.
+
+3. A continuación, instala Nodemon como una dependencia de desarrollo ejecutando el siguiente comando:
+
+```bash
+npm i -E -D nodemon
+```
+
+4. Una vez completada la instalación, verifica que Nodemon se haya agregado correctamente a tu archivo `package.json` y que se haya instalado en la carpeta "node_modules".
+
+5. Ahora, puedes utilizar Nodemon en tu proyecto agregando un script en tu archivo `package.json`. Abre el archivo `package.json` en un editor de texto y agrega el siguiente código dentro del bloque "scripts":
+
+```json
+"scripts": {
+"dev": "nodemon app.js"
+}
+```
+En este ejemplo, se crea un script llamado "dev" que ejecuta Nodemon y pasa "app.js" como archivo principal de tu aplicación. Puedes cambiar "app.js" por el nombre del archivo que deseas ejecutar con Nodemon.
+
+6. Guarda los cambios en tu archivo `package.json`.
+
+7. Ahora puedes iniciar tu aplicación ejecutando el siguiente comando en la terminal:
+
+```bash
+npm run dev
+```
+Esto ejecutará tu aplicación con Nodemon, lo que permitirá que se reinicie automáticamente cuando se detecten cambios en los archivos del proyecto.
+
+Recuerda que, para que Nodemon funcione correctamente, debes asegurarte de tener un archivo principal de la aplicación, como "app.js", que contenga el código del servidor que deseas ejecutar.
+
+Con estos pasos, deberías tener Nodemon instalado en tu proyecto y tu servidor HTTP listo para funcionar. Si necesitas más información o tienes alguna pregunta adicional, no dudes en consultarme.
