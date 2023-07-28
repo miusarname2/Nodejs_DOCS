@@ -693,3 +693,57 @@ export class User {
   constructor(ID: number, nom_com: string, ema: string, psw:
 
 ```
+
+# Node JS Avanzado - JSON Web Token (JWT) y "jose"
+
+## 3.4. ¿Qué es JWT (JSON Web Token)?
+
+JWT (JSON Web Token) es un estándar abierto (RFC 7519) que define una forma compacta y autónoma de transmitir información entre dos partes en forma de objeto JSON. Es comúnmente utilizado para autenticar usuarios y garantizar la integridad de la información entre un cliente (generalmente un navegador web) y un servidor o servicio.
+
+Un JWT consta de tres partes separadas por puntos ('.'): el encabezado, los datos o carga útil (payload) y una firma. La estructura general de un JWT es la siguiente:
+
+```bash
+xxxxx.yyyyy.zzzzz
+```
+
+- **xxxxx:** Encabezado (Header) codificado en Base64url, que contiene información sobre el algoritmo de firma y el tipo de token.
+- **yyyyy:** Datos o carga útil (Payload) codificado en Base64url, que contiene los datos que se desean transmitir entre las partes. Puede incluir información como el identificador del usuario, roles, permisos, etc.
+- **zzzzz:** Firma digital que asegura que el token no ha sido modificado en el camino y puede ser verificado por el servidor. La firma se genera utilizando el encabezado codificado, la carga útil codificada, una clave secreta (en el caso de JWT con cifrado HMAC) o una clave pública/privada (en el caso de JWT con cifrado RSA).
+
+Los JWT son ampliamente utilizados en aplicaciones web y API RESTful como mecanismo de autenticación y autorización, ya que son compactos, seguros y autocontenido. Almacenar la información relevante en el token permite que los servidores no necesiten mantener un estado de sesión, lo que facilita la escalabilidad y la distribución del sistema.
+
+Es importante tener en cuenta que, debido a que el contenido de un JWT está codificado en Base64url y no cifrado, cualquier persona que tenga acceso al token puede leer su contenido. Por lo tanto, es esencial no almacenar información sensible como contraseñas en el token y utilizar siempre una conexión segura (HTTPS) para transmitir los tokens entre el cliente y el servidor.
+
+Más información: [jwt.io](https://jwt.io/)
+
+### 3.4.1. ¿Qué es "jose"?
+
+En el contexto de npm, "jose" es una librería que proporciona funcionalidades relacionadas con JSON Object Signing and Encryption (JOSE). JOSE es un conjunto de especificaciones que define métodos para firmar y cifrar objetos JSON, que a su vez se utilizan para crear y validar JSON Web Tokens (JWT).
+
+La librería "jose" de npm permite trabajar con tokens JWT de una manera más sencilla y segura, ya que proporciona métodos para generar firmas digitales (JWS - JSON Web Signature) y cifrado (JWE - JSON Web Encryption), además de permitir verificar la autenticidad de los tokens y desencriptarlos.
+
+Algunas de las funcionalidades que ofrece la librería "jose" incluyen:
+- Generar y verificar tokens JWT firmados.
+- Generar y verificar tokens JWT cifrados.
+- Soporte para múltiples algoritmos de firma y cifrado, como RS256, HS256, ES256, entre otros.
+- Manipulación de claves públicas y privadas para la firma y el cifrado.
+- Creación y verificación de claves JSON Web Key (JWK).
+
+Esta librería puede ser útil para implementar autenticación y autorización en aplicaciones web y servicios que utilicen tokens JWT, ya que simplifica el proceso de generación y validación de estos tokens. Es importante utilizar la librería "jose" con precaución y siguiendo buenas prácticas de seguridad para garantizar la integridad y la confidencialidad de los tokens utilizados en la aplicación.
+
+### 3.4.2. Instalación de "jose" para Windows y Linux
+
+Para instalar "jose" en un sistema Windows o Linux utilizando npm, sigue estos pasos:
+
+1. Abre una terminal o línea de comandos en tu sistema operativo.
+2. Navega hasta el directorio de tu proyecto o donde desees instalar la librería "jose".
+3. Ejecuta el siguiente comando para instalar "jose" desde npm:
+
+```bash
+npm i -E -D jose
+```
+Este comando descargará la última versión de la librería "jose" y la agregará como dependencia en tu proyecto. Una vez completada la instalación, podrás utilizar la librería "jose" en tu código.
+
+Después de instalar "jose", podrás utilizar las funcionalidades proporcionadas por esta librería para trabajar con tokens JWT de forma más segura y eficiente en tu aplicación.
+
+Recuerda siempre seguir las buenas prácticas de seguridad al utilizar tokens JWT y proteger la clave privada utilizada para firmar y desencriptar los tokens.
