@@ -742,8 +742,164 @@ Para instalar "jose" en un sistema Windows o Linux utilizando npm, sigue estos p
 ```bash
 npm i -E -D jose
 ```
+
 Este comando descargará la última versión de la librería "jose" y la agregará como dependencia en tu proyecto. Una vez completada la instalación, podrás utilizar la librería "jose" en tu código.
 
 Después de instalar "jose", podrás utilizar las funcionalidades proporcionadas por esta librería para trabajar con tokens JWT de forma más segura y eficiente en tu aplicación.
 
 Recuerda siempre seguir las buenas prácticas de seguridad al utilizar tokens JWT y proteger la clave privada utilizada para firmar y desencriptar los tokens.
+
+# Node JS Avanzado - Introducción a OAuth 2.0
+
+## 4.1. ¿Qué es OAuth 2.0?
+
+OAuth 2.0 es un protocolo de autorización que permite a una aplicación obtener acceso seguro a recursos protegidos en nombre de un usuario. Es ampliamente utilizado en aplicaciones web y API RESTful como mecanismo para delegar el acceso a recursos sin compartir las credenciales de usuario. El estándar OAuth 2.0 se describe en el RFC 6749.
+
+El proceso de OAuth 2.0 implica cuatro actores principales:
+1. **Propietario del recurso (Resource Owner):** Es el usuario que posee los recursos protegidos, como datos personales o fotos almacenadas en un servicio en la nube.
+2. **Cliente (Client):** Es la aplicación que solicita acceso a los recursos protegidos en nombre del propietario del recurso. Por ejemplo, una aplicación web o una aplicación móvil.
+3. **Servidor de autorización (Authorization Server):** Es el servidor que autentica al propietario del recurso y emite tokens de acceso al cliente después de que el propietario del recurso haya dado su consentimiento.
+4. **Servidor de recursos (Resource Server):** Es el servidor que aloja los recursos protegidos y acepta los tokens de acceso emitidos por el servidor de autorización.
+
+## 4.2. Flujo de autorización de OAuth 2.0
+
+El flujo de autorización de OAuth 2.0 consta de varios pasos que permiten al cliente obtener un token de acceso para acceder a los recursos protegidos en nombre del propietario del recurso. Los pasos principales del flujo son:
+
+1. **Solicitud de autorización (Authorization Request):** El cliente redirige al propietario del recurso al servidor de autorización para obtener su consentimiento. Esto se hace a través de una solicitud de autorización, que incluye detalles sobre el alcance de los recursos a los que el cliente quiere acceder.
+
+2. **Consentimiento del propietario del recurso (Resource Owner Consent):** El propietario del recurso autentica con el servidor de autorización y da su consentimiento para que el cliente acceda a los recursos protegidos en su nombre.
+
+3. **Obtención del código de autorización (Authorization Code):** Después de recibir el consentimiento, el servidor de autorización emite un código de autorización al cliente.
+
+4. **Intercambio del código de autorización por un token de acceso (Authorization Code Grant):** El cliente intercambia el código de autorización con el servidor de autorización para obtener un token de acceso. Este token de acceso se utilizará para acceder a los recursos protegidos en el servidor de recursos.
+
+5. **Acceso a los recursos protegidos (Resource Access):** El cliente utiliza el token de acceso para acceder a los recursos protegidos en el servidor de recursos en nombre del propietario del recurso.
+
+## 4.3. Implementación de OAuth 2.0 en Node.js
+
+Para implementar OAuth 2.0 en una aplicación Node.js, se utilizan diversas librerías y estrategias específicas. Algunas de las librerías populares para trabajar con OAuth 2.0 en Node.js son Passport.js y OAuth2orize. Estas librerías facilitan la integración del flujo de autorización y permiten gestionar la autenticación y autorización de usuarios mediante diferentes proveedores de identidad, como Google, Facebook, Twitter, entre otros.
+
+Es importante mencionar que OAuth 2.0 es un protocolo robusto que debe implementarse correctamente para garantizar la seguridad y protección de los recursos y datos del usuario. La configuración adecuada y el manejo seguro de tokens de acceso son fundamentales para evitar vulnerabilidades en la aplicación.
+
+## 4.4. Conclusiones
+
+OAuth 2.0 es una poderosa solución para gestionar la autorización y autenticación en aplicaciones web y API RESTful. Al delegar la autorización a través de tokens de acceso, los clientes pueden acceder a recursos protegidos sin requerir las credenciales del usuario. La implementación de OAuth 2.0 en Node.js puede lograrse utilizando librerías como Passport.js y OAuth2orize, lo que permite una integración segura y eficiente con proveedores de identidad populares.
+
+Es fundamental entender los distintos flujos de autorización y las implicaciones de seguridad al implementar OAuth 2.0 para proteger la privacidad y la confidencialidad de los datos del usuario en la aplicación.
+
+Recuerda siempre seguir las mejores prácticas de seguridad al implementar sistemas de autorización y autenticación, y asegurarte de mantener tus dependencias actualizadas para evitar vulnerabilidades conocidas.
+
+## Ejemplo
+
+```js
+const express = require('express');
+const oauth2orize = require('oauth2orize');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const { AuthorizationCode } = require('oauth2orize');
+const { createToken, generateToken } = require('./tokenService');
+
+const app = express();
+const server = oauth2orize.createServer();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+
+// Implementa tus modelos y funciones para gestionar la base de datos de clientes, usuarios y tokens.
+
+// Configura el flujo de autorización de OAuth2orize
+server.grant(oauth2orize.grant.code((client, redirectURI, user, ares, done) => {
+  const code = generateToken(); // Genera un código de autorización
+  // Guarda el código en tu base de datos vinculado al cliente y al usuario
+  // Aquí también puedes definir la duración del código de autorización y otras opciones.
+  // ...
+
+  done(null, code);
+}));
+
+// Implementa la estrategia de intercambio del código de autorización por el token de acceso
+server.exchange(oauth2orize.exchange.code((client, code, redirectURI, done) => {
+  // Valida el código de autorización en tu base de datos
+  // Recupera el cliente asociado al código
+  // Genera un nuevo token de acceso y lo vincula al cliente y al usuario
+  // ...
+
+  const token = createToken(); // Genera un token de acceso
+  done(null, token);
+}));
+
+// Rutas para autorización y emisión de tokens
+app.get('/dialog/authorize', server.authorize((clientID, redirectURI, done) => {
+  // Valida el cliente y la redirección en tu base de datos
+  // Pregunta al usuario si desea conceder el acceso
+  // ...
+
+  done(null, true, { clientID, redirectURI });
+}), (req, res) => {
+  // Renderiza la página de confirmación de autorización al usuario
+  // Aquí se muestra la información del cliente y los permisos solicitados.
+  // ...
+
+  res.render('authorization', { transactionID: req.oauth2.transactionID, user: req.user, client: req.oauth2.client });
+});
+
+app.post('/dialog/authorize/decision', server.decision());
+
+app.post('/oauth/token', server.token(), server.errorHandler());
+
+// Inicia el servidor
+app.listen(3000, () => {
+  console.log('Servidor escuchando en http://localhost:3000');
+});
+
+```
+
+## Ejemplo 2: Implementación de OAuth 2.0 con Passport.js en Express
+
+```js
+const express = require('express');
+const passport = require('passport');
+const OAuth2Strategy = require('passport-oauth2-client-password').Strategy;
+const bodyParser = require('body-parser');
+const { createToken, generateToken } = require('./tokenService');
+
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+
+// Implementa tus modelos y funciones para gestionar la base de datos de clientes, usuarios y tokens.
+
+// Configura la estrategia de autenticación con OAuth 2.0
+passport.use(new OAuth2Strategy((clientID, clientSecret, done) => {
+  // Valida el cliente en tu base de datos
+  // Si el cliente es válido, pasa el cliente y su ID a través de "done"
+  // ...
+
+  done(null, client, clientID);
+}));
+
+// Ruta para emitir el token de acceso
+app.post('/oauth/token', passport.authenticate('oauth2-client-password', { session: false }), (req, res) => {
+  // Valida el cliente y su secreto
+  // Genera un nuevo token de acceso vinculado al cliente y al usuario
+  // ...
+
+  const token = createToken(); // Genera un token de acceso
+  res.json({ access_token: token });
+});
+
+// Rutas protegidas que requieren autenticación con el token de acceso
+app.get('/resource', passport.authenticate('oauth2-client-password', { session: false }), (req, res) => {
+  // Aquí puedes acceder a los recursos protegidos
+  // ...
+
+  res.json({ message: 'Recursos protegidos disponibles' });
+});
+
+// Inicia el servidor
+app.listen(3000, () => {
+  console.log('Servidor escuchando en http://localhost:3000');
+});
+
+```
