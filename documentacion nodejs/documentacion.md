@@ -61,3 +61,48 @@ Instalar la versión 18.16.0 de Node.js con NVM para Windows.
 
 #### 1.4.5. Instalación de NVM en Linux
 Instalar Curl y luego seguir los pasos para instalar Node.js 
+
+# Resumen: Diferencias de Apis Globales JavaScript en Node.js
+
+## 1. global y window
+
+En JavaScript, la API global varía según el entorno en el que se ejecute el código. En un navegador web, se utiliza la palabra clave "window" como el objeto global, representando la ventana del navegador y proporcionando una interfaz para interactuar con ella. En Node.js, no existe el objeto "window"; en su lugar, se utiliza el objeto "global" como el objeto global para variables, funciones y objetos en la aplicación.
+
+Ejemplo práctico en Node.js:
+```js
+// Node.js
+global.miVariable = 'Hola, soy una variable global';
+console.log(miVariable); // Salida: Hola, soy una variable global
+
+En el navegador:
+
+<!-- En el navegador -->
+<script>
+  window.miVariable = 'Hola, soy una variable global';
+  console.log(miVariable); // Salida: Hola, soy una variable global
+</script>
+
+## 1.  process
+
+En Node.js, el objeto "process" es otro objeto global que proporciona información y control sobre el proceso actual en ejecución. Es una instancia de la clase EventEmitter, lo que significa que puede emitir y escuchar eventos.
+
+Ejemplo práctico en Node.js:
+
+// Node.js
+process.on('exit', (code) => {
+  console.log(`El proceso ha finalizado con el código de salida: ${code}`);
+});
+
+// Finalizar el proceso con un código de salida 0
+process.exit(0);
+// Salida: El proceso ha finalizado con el código de salida: 0
+
+
+El objeto "process" también proporciona propiedades útiles, como "env", que contiene las variables de entorno del sistema.
+
+Ejemplo práctico en Node.js:
+
+// Node.js
+console.log(process.env.NODE_ENV); // Obtener el valor de la variable de entorno NODE_ENV
+
+Recuerda que estos ejemplos son para Node.js, y si deseas ejecutarlos en un navegador web, deberás adaptar el código a su entorno específico. Este resumen proporciona una visión general de las diferencias clave entre las APIs globales en JavaScript en el navegador y en Node.js, y cómo se pueden usar en un entorno práctico.
